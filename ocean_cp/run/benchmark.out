@@ -1,0 +1,40 @@
+Generating input file ...
+Running /mnt/SG/geraldo/PIM-benchmarks/parsec-3.0/bin/../ext/splash2x/apps/ocean_cp/inst/amd64-linux.gcc/bin/ocean_cp -n514 -p1 -e1e-07 -r20000 -t28800:
+
+Ocean simulation with W-cycle multigrid solver
+    Processors                         : 1
+    Grid size                          : 514 x 514
+    Grid resolution (meters)           : 20000.00
+    Time between relaxations (seconds) : 28800
+    Error tolerance                    : 1e-07
+
+[HOOKS] ROI begin
+[HOOKS] ROI end
+[HOOKS] ROI begin
+[HOOKS] ROI end
+[HOOKS] ROI begin
+[HOOKS] ROI end
+[HOOKS] ROI begin
+[HOOKS] ROI end
+[HOOKS] ROI begin
+[HOOKS] ROI end
+[HOOKS] ROI begin
+[HOOKS] ROI end
+
+                       PROCESS STATISTICS
+                  Total          Multigrid         Multigrid
+ Proc             Time             Time            Fraction
+    0            150864              65819             0.436
+
+                       TIMING INFORMATION
+Start time                        : 1538553009493939
+Initialization finish time        : 1538553009638427
+Overall finish time               : 1538553009789291
+Total time with initialization    :           295352
+Total time without initialization :           150864
+    (excludes first timestep)
+
+
+real	0m0.301s
+user	0m0.272s
+sys	0m0.028s

@@ -1,0 +1,40 @@
+PARSEC Compile Information
+==========================
+Package 'splash2x.ocean_ncp'
+Built on Tue Oct 15 21:19:08 CEST 2019
+
+Configure arguments:  --prefix=/mnt/panzer/mnika/Workload_Pool/parsec-3.0/bin/../ext/splash2x/apps/ocean_ncp/inst/amd64-linux.gcc
+
+Environment modifications: version=pthreads
+
+CC: /usr/bin/gcc
+Version: gcc (Debian 6.3.0-18+deb9u1) 6.3.0 20170516
+Copyright (C) 2016 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+CFLAGS: -g -funroll-loops -fprefetch-loop-arrays -static-libgcc -Wl,--hash-style=both,--as-needed -DPARSEC_VERSION=3.0-beta-20150206
+
+CXX: /usr/bin/g++
+Version: g++ (Debian 6.3.0-18+deb9u1) 6.3.0 20170516
+Copyright (C) 2016 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+CXXFLAGS: -g -funroll-loops -fprefetch-loop-arrays -fpermissive -fno-exceptions -static-libgcc -Wl,--hash-style=both,--as-needed -DPARSEC_VERSION=3.0-beta-20150206
+
+CCAS: 
+Version: 
+CCASFLAGS: 
+
+LD: /usr/bin/ld
+Version: GNU ld (GNU Binutils for Debian) 2.28
+Copyright (C) 2017 Free Software Foundation, Inc.
+This program is free software; you may redistribute it under the terms of
+the GNU General Public License version 3 or (at your option) a later version.
+This program has absolutely no warranty.
+LDFLAGS: -L/usr/lib64 -L/usr/lib
+
+JAVAC: /usr/bin/javac
+Version: javac 1.8.0_162
+JFLAGS: 
+
+[EOF]
