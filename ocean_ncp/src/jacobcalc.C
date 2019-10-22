@@ -32,6 +32,8 @@ void jacobcalc(double x[IMAX][JMAX], double y[IMAX][JMAX], double z[IMAX][JMAX],
   //         zsim_roi_begin();
 //	zsim_PIM_function_begin();
 //#endif 
+    zsim_stamp();
+
    double f1;
    double f2;
    double f3;
@@ -48,6 +50,7 @@ void jacobcalc(double x[IMAX][JMAX], double y[IMAX][JMAX], double z[IMAX][JMAX],
    long i;
    long j;
 
+
    if (pid == MASTER) {
      z[0][0]=0.0;
    }
@@ -60,6 +63,8 @@ void jacobcalc(double x[IMAX][JMAX], double y[IMAX][JMAX], double z[IMAX][JMAX],
    if (pid == nprocs-1) {
      z[im-1][jm-1]=0.0;
    }
+   zsim_stamp();
+
    for (iindex=firstcol;iindex<=lastcol;iindex++) {
      indexp1 = iindex+1;
      indexm1 = iindex-1;
@@ -82,6 +87,8 @@ void jacobcalc(double x[IMAX][JMAX], double y[IMAX][JMAX], double z[IMAX][JMAX],
        z[i][iindex] = factjacob*(f1+f2+f3+f4+f5+f6+f7+f8);
      }
    }
+   zsim_stamp();
+
    if (firstrow == 1) {
      for (j=firstcol;j<=lastcol;j++) {
        z[0][j] = 0.0;
@@ -92,6 +99,9 @@ void jacobcalc(double x[IMAX][JMAX], double y[IMAX][JMAX], double z[IMAX][JMAX],
        z[im-1][j] = 0.0;
      }
    }
+
+   zsim_stamp();
+
    if (firstcol == 1) {
      for (j=firstrow;j<=lastrow;j++) {
        z[j][0] = 0.0;
@@ -102,6 +112,8 @@ void jacobcalc(double x[IMAX][JMAX], double y[IMAX][JMAX], double z[IMAX][JMAX],
        z[j][jm-1] = 0.0;
      }
    }
+   zsim_stamp();
+
 //#ifdef ZSIM_TRACE_2
   //      zsim_PIM_function_end();
   //  zsim_roi_end();

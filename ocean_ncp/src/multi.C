@@ -138,11 +138,15 @@ void multig(long my_id)
 /* if we have not converged                                        */
          if ((k != 1) && (g_error/errp >= 0.6) && (k > minlevel)) {
 /* if need to go to coarser grid                                   */
+           zsim_stamp();
            rescal(k,my_num);
+           zsim_stamp();
 /* transfer residual to rhs of coarser grid                        */
            lev_tol[k-1] = 0.3 * g_error;
            k = k-1;
+           zsim_stamp();
            putz(k,my_num);
+           zsim_stamp();
 /* make initial guess on coarser grid zero                         */
            g_error = 1.0e30;
          }
@@ -154,7 +158,9 @@ void multig(long my_id)
          flag2 = 1;
        } else {
 /* else go to next finest grid                                     */
+    	 zsim_stamp();
          intadd(k,my_num);
+         zsim_stamp();
          k++;
          g_error = 1.0e30;
        }

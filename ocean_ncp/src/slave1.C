@@ -124,16 +124,22 @@ void slave()
    if (procid == nprocs-1) {
      fields2->psium[im-1][jm-1]=0.0;
    }
+   zsim_stamp();
+
    if (firstrow == 1) {
      for(j=firstcol;j<=lastcol;j++) {
        fields2->psium[0][j] = 0.0;
      }
    }
+   zsim_stamp();
+
    if ((firstrow+numrows) == im-1) {
      for(j=firstcol;j<=lastcol;j++) {
        fields2->psium[im-1][j] = 0.0;
      }
    }
+   zsim_stamp();
+
    if (firstcol == 1) {
      for(j=firstrow;j<=lastrow;j++) {
        fields2->psium[j][0] = 0.0;
@@ -144,12 +150,15 @@ void slave()
        fields2->psium[j][jm-1] = 0.0;
      }
    }
+   zsim_stamp();
 
    for(i=firstrow;i<=lastrow;i++) {
      for(iindex=firstcol;iindex<=lastcol;iindex++) {
        fields2->psium[i][iindex] = 0.0;
      }
    }
+   zsim_stamp();
+
    if (procid == MASTER) {
      fields2->psilm[0][0]=0.0;
    }
@@ -162,21 +171,29 @@ void slave()
    if (procid == nprocs-1) {
      fields2->psilm[im-1][jm-1]=0.0;
    }
+   zsim_stamp();
+
    if (firstrow == 1) {
      for(j=firstcol;j<=lastcol;j++) {
        fields2->psilm[0][j] = 0.0;
      }
    }
+   zsim_stamp();
+
    if ((firstrow+numrows) == im-1) {
      for(j=firstcol;j<=lastcol;j++) {
        fields2->psilm[im-1][j] = 0.0;
      }
    }
+   zsim_stamp();
+
    if (firstcol == 1) {
      for(j=firstrow;j<=lastrow;j++) {
        fields2->psilm[j][0] = 0.0;
      }
    }
+   zsim_stamp();
+
    if ((firstcol+numcols) == jm-1) {
      for(j=firstrow;j<=lastrow;j++) {
        fields2->psilm[j][jm-1] = 0.0;
@@ -187,6 +204,7 @@ void slave()
        fields2->psilm[i][iindex] = 0.0;
      }
    }
+   zsim_stamp();
 
    if (procid == MASTER) {
      wrk1->psib[0][0]=1.0;
@@ -200,31 +218,43 @@ void slave()
    if (procid == nprocs-1) {
      wrk1->psib[im-1][jm-1]=1.0;
    }
+   zsim_stamp();
+
    if (firstrow == 1) {
      for(j=firstcol;j<=lastcol;j++) {
        wrk1->psib[0][j] = 1.0;
      }
    }
+   zsim_stamp();
+
    if ((firstrow+numrows) == im-1) {
      for(j=firstcol;j<=lastcol;j++) {
        wrk1->psib[im-1][j] = 1.0;
      }
    }
+   zsim_stamp();
+
    if (firstcol == 1) {
      for(j=firstrow;j<=lastrow;j++) {
        wrk1->psib[j][0] = 1.0;
      }
    }
+   zsim_stamp();
+
    if ((firstcol+numcols) == jm-1) {
      for(j=firstrow;j<=lastrow;j++) {
        wrk1->psib[j][jm-1] = 1.0;
      }
    }
+   zsim_stamp();
+
    for(i=firstrow;i<=lastrow;i++) {
      for(iindex=firstcol;iindex<=lastcol;iindex++) {
        wrk1->psib[i][iindex] = 0.0;
      }
    }
+   zsim_stamp();
+
 
 /* wait until all processes have completed the above initialization  */
 #if defined(MULTIPLE_BARRIERS)
@@ -252,11 +282,15 @@ BARRIER(bars->barrier,nprocs)
    if (jend == jm-2) {
      jend = jm-1;
    }
+   zsim_stamp();
+
    for(i=istart;i<=iend;i++) {
      for(j=jstart;j<=jend;j++) {
        multi->rhs_multi[numlev-1][i][j] = wrk1->psib[i][j] * ressqr;
      }
    }
+   zsim_stamp();
+
    if (istart == 0) {
      for(j=jstart;j<=jend;j++) {
        multi->q_multi[numlev-1][0][j] = wrk1->psib[0][j];
@@ -267,16 +301,21 @@ BARRIER(bars->barrier,nprocs)
        multi->q_multi[numlev-1][im-1][j] = wrk1->psib[im-1][j];
      }
    }
+   zsim_stamp();
+
    if (jstart == 0) {
      for(i=istart;i<=iend;i++) {
        multi->q_multi[numlev-1][i][0] = wrk1->psib[i][0];
      }
    }
+   zsim_stamp();
+
    if (jend == jm-1) {
      for(i=istart;i<=iend;i++) {
        multi->q_multi[numlev-1][i][jm-1] = wrk1->psib[i][jm-1];
      }
    }
+   zsim_stamp();
 
    fac = 1.0 / (4.0 - ressqr*eig2);
    for(i=ist;i<=ien;i++) {
@@ -286,6 +325,8 @@ BARRIER(bars->barrier,nprocs)
            ressqr*wrk1->psib[i][j]);
      }
    }
+   zsim_stamp();
+
 #if defined(MULTIPLE_BARRIERS)
    BARRIER(bars->sl_prini,nprocs)
 #else
@@ -293,11 +334,15 @@ BARRIER(bars->barrier,nprocs)
 #endif
    multig(procid);
 
+   zsim_stamp();
+
    for(i=istart;i<=iend;i++) {
      for(j=jstart;j<=jend;j++) {
        wrk1->psib[i][j] = multi->q_multi[numlev-1][i][j];
      }
    }
+   zsim_stamp();
+
 #if defined(MULTIPLE_BARRIERS)
    BARRIER(bars->sl_psini,nprocs)
 #else
@@ -319,31 +364,43 @@ BARRIER(bars->barrier,nprocs)
    if (procid == nprocs-1) {
      psibipriv=psibipriv+0.25*(wrk1->psib[im-1][jm-1]);
    }
+   zsim_stamp();
+
    if (firstrow == 1) {
      for(j=firstcol;j<=lastcol;j++) {
        psibipriv = psibipriv + 0.5*wrk1->psib[0][j];
      }
    }
+   zsim_stamp();
+
    if ((firstrow+numrows) == im-1) {
      for(j=firstcol;j<=lastcol;j++) {
        psibipriv = psibipriv + 0.5*wrk1->psib[im-1][j];
      }
    }
+   zsim_stamp();
+
    if (firstcol == 1) {
      for(j=firstrow;j<=lastrow;j++) {
        psibipriv = psibipriv + 0.5*wrk1->psib[j][0];
      }
    }
+   zsim_stamp();
+
    if ((firstcol+numcols) == jm-1) {
      for(j=firstrow;j<=lastrow;j++) {
        psibipriv = psibipriv + 0.5*wrk1->psib[j][jm-1];
      }
    }
+   zsim_stamp();
+
      for(iindex=firstcol;iindex<=lastcol;iindex++) {
    for(i=firstrow;i<=lastrow;i++) {
        psibipriv = psibipriv + wrk1->psib[i][iindex];
      }
    }
+     zsim_stamp();
+
 
 /* update the shared variable psibi by summing all the psibiprivs
    of the individual processes into it.  note that this combined
@@ -353,6 +410,8 @@ BARRIER(bars->barrier,nprocs)
    LOCK(locks->psibilock)
    global->psibi = global->psibi + psibipriv;
    UNLOCK(locks->psibilock)
+
+   zsim_stamp();
 
    for(psiindex=0;psiindex<=1;psiindex++) {
      if (procid == MASTER) {
@@ -393,8 +452,12 @@ BARRIER(bars->barrier,nprocs)
        }
      }
    }
+   zsim_stamp();
+
 
 /* initialize psi matrices the same way  */
+
+   zsim_stamp();
 
    for(psiindex=0;psiindex<=1;psiindex++) {
      if (procid == MASTER) {
@@ -435,6 +498,8 @@ BARRIER(bars->barrier,nprocs)
        }
      }
    }
+   zsim_stamp();
+
 
 /* compute input curl of wind stress */
 
@@ -456,6 +521,8 @@ BARRIER(bars->barrier,nprocs)
      sintemp = sin(sintemp);
      frcng->tauz[im-1][jm-1] = frcng->tauz[0][jm-1];
    }
+   zsim_stamp();
+
    if (firstrow == 1) {
      for(j=firstcol;j<=lastcol;j++) {
        sintemp = pi*((double) j)*res/ysca1;
@@ -464,6 +531,8 @@ BARRIER(bars->barrier,nprocs)
        frcng->tauz[0][j] = curlt;
      }
    }
+   zsim_stamp();
+
    if ((firstrow+numrows) == im-1) {
      for(j=firstcol;j<=lastcol;j++) {
        sintemp = pi*((double) j)*res/ysca1;
@@ -472,11 +541,15 @@ BARRIER(bars->barrier,nprocs)
        frcng->tauz[im-1][j] = curlt;
      }
    }
+   zsim_stamp();
+
    if (firstcol == 1) {
      for(j=firstrow;j<=lastrow;j++) {
        frcng->tauz[j][0] = 0.0;
      }
    }
+   zsim_stamp();
+
    if ((firstcol+numcols) == jm-1) {
      sintemp = pi*((double) jmm1)*res/ysca1;
      sintemp = sin(sintemp);
@@ -485,6 +558,8 @@ BARRIER(bars->barrier,nprocs)
        frcng->tauz[j][jm-1] = curlt;
      }
    }
+   zsim_stamp();
+
    for(iindex=firstcol;iindex<=lastcol;iindex++) {
      sintemp = pi*((double) iindex)*res/ysca1;
      sintemp = sin(sintemp);
@@ -493,6 +568,8 @@ BARRIER(bars->barrier,nprocs)
        frcng->tauz[i][iindex] = curlt;
      }
    }
+   zsim_stamp();
+
 #if defined(MULTIPLE_BARRIERS)
    BARRIER(bars->sl_onetime,nprocs)
 #else
@@ -502,6 +579,7 @@ BARRIER(bars->barrier,nprocs)
 /***************************************************************
  one-time stuff over at this point
  ***************************************************************/
+   zsim_stamp();
 
    while (!endflag) {
      while ((!dayflag) || (!dhourflag)) {
@@ -623,6 +701,8 @@ BARRIER(bars->barrier,nprocs)
        endflag = 1;
      }
   }
+  zsim_stamp();
+
   if ((procid == MASTER) || (do_stats)) {
     CLOCK(t1);
     gp[procid].total_time = t1-gp[procid].total_time;

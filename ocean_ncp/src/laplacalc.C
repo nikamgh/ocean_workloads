@@ -34,6 +34,8 @@ void laplacalc(double x[IMAX][JMAX], double z[IMAX][JMAX], long firstrow, long l
   //         zsim_roi_begin();
 //	zsim_PIM_function_begin();
 //#endif
+    zsim_stamp();
+
    long iindex;
    long indexp1;
    long indexm1;
@@ -52,26 +54,34 @@ void laplacalc(double x[IMAX][JMAX], double z[IMAX][JMAX], long firstrow, long l
                               x[i][indexm1]-4.*x[i][iindex]);
      }
    }
+   zsim_stamp();
+
    if (firstrow == 1) {
      for (j=firstcol;j<=lastcol;j++) {
        z[0][j] = 0.0;
      }
    }
+
    if ((firstrow+numrows) == im-1) {
      for (j=firstcol;j<=lastcol;j++) {
        z[im-1][j] = 0.0;
      }
    }
+   zsim_stamp();
+
    if (firstcol == 1) {
      for (j=firstrow;j<=lastrow;j++) {
        z[j][0] = 0.0;
      }
    }
+
    if ((firstcol+numcols) == jm-1) {
      for (j=firstrow;j<=lastrow;j++) {
        z[j][jm-1] = 0.0;
      }
    }
+   zsim_stamp();
+
 //#ifdef ZSIM_TRACE_3
   //      zsim_PIM_function_end();
   //  zsim_roi_end();
