@@ -28,6 +28,8 @@ void laplacalc(long procid, double ****x, double ****z, long psiindex, long firs
 {
 
 zsim_PIM_function_begin();
+zsim_stamp();
+
    long iindex;
    long indexp1;
    long indexm1;
@@ -51,6 +53,8 @@ zsim_PIM_function_begin();
        t1a[i] = t1b[i];
      }
    }
+   zsim_stamp();
+
    j = gp[procid].neighbors[DOWN];
    if (j != -1) {
      t1a = (double *) t2a[im-1];
@@ -66,6 +70,8 @@ zsim_PIM_function_begin();
        t2a[i][0] = t2b[i][jm-2];
      }
    }
+   zsim_stamp();
+
    j = gp[procid].neighbors[RIGHT];
    if (j != -1) {
      t2b = (double **) x[j][psiindex];
@@ -91,6 +97,8 @@ zsim_PIM_function_begin();
                               t1a[indexm1]-4.*t1a[iindex]);
      }
    }
+   zsim_stamp();
+
 
    if (gp[procid].neighbors[UP] == -1) {
      t1b = (double *) t2b[0];
@@ -104,6 +112,8 @@ zsim_PIM_function_begin();
        t1b[j] = 0.0;
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[LEFT] == -1) {
      for (j=firstrow;j<=lastrow;j++) {
        t2b[j][0] = 0.0;
@@ -114,6 +124,8 @@ zsim_PIM_function_begin();
        t2b[j][jm-1] = 0.0;
      }
    }
+   zsim_stamp();
+
 
 zsim_PIM_function_end();
 }

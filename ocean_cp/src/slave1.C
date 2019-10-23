@@ -28,8 +28,9 @@ EXTERN_ENV
 #include "/mnt/panzer/mnika/Workload_Pool/zsim_hooks.h"
 void slave()
 {
-  //  zsim_roi_begin();
+    zsim_roi_begin();
   //  zsim_PIM_function_begin();
+   zsim_stamp();
    long i;
    long j;
    long nstep;
@@ -190,6 +191,8 @@ eof(double) +
    } else {
       psinum = 1;
    }
+   zsim_stamp();
+
 
 /* every process gets its own copy of the timing variables to avoid
    contention at shared memory locations.  here, these variables
@@ -208,6 +211,8 @@ eof(double) +
        t1a[iindex] = f0+beta*(y-ysca1);
      }
    }
+   zsim_stamp();
+
 
    t2a = (double **) psium[procid];
    if ((gp[procid].neighbors[UP] == -1) && (gp[procid].neighbors[LEFT] == -1)) {
@@ -222,28 +227,37 @@ eof(double) +
    if ((gp[procid].neighbors[DOWN] == -1) && (gp[procid].neighbors[RIGHT] == -1)) {
      t2a[im-1][jm-1]=0.0;
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[UP] == -1) {
      t1a = (double *) t2a[0];
      for(j=firstcol;j<=lastcol;j++) {
        t1a[j] = 0.0;
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[DOWN] == -1) {
      t1a = (double *) t2a[im-1];
      for(j=firstcol;j<=lastcol;j++) {
        t1a[j] = 0.0;
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[LEFT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2a[j][0] = 0.0;
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[RIGHT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2a[j][jm-1] = 0.0;
      }
    }
+   zsim_stamp();
 
    for(i=firstrow;i<=lastrow;i++) {
      t1a = (double *) t2a[i];
@@ -251,6 +265,8 @@ eof(double) +
        t1a[iindex] = 0.0;
      }
    }
+   zsim_stamp();
+
    t2a = (double **) psilm[procid];
    if ((gp[procid].neighbors[UP] == -1) && (gp[procid].neighbors[LEFT] == -1)) {
      t2a[0][0]=0.0;
@@ -264,34 +280,45 @@ eof(double) +
    if ((gp[procid].neighbors[DOWN] == -1) && (gp[procid].neighbors[RIGHT] == -1)) {
      t2a[im-1][jm-1]=0.0;
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[UP] == -1) {
      t1a = (double *) t2a[0];
      for(j=firstcol;j<=lastcol;j++) {
        t1a[j] = 0.0;
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[DOWN] == -1) {
      t1a = (double *) t2a[im-1];
      for(j=firstcol;j<=lastcol;j++) {
        t1a[j] = 0.0;
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[LEFT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2a[j][0] = 0.0;
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[RIGHT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2a[j][jm-1] = 0.0;
      }
    }
+   zsim_stamp();
+
    for(i=firstrow;i<=lastrow;i++) {
      t1a = (double *) t2a[i];
      for(iindex=firstcol;iindex<=lastcol;iindex++) {
        t1a[iindex] = 0.0;
      }
    }
+   zsim_stamp();
 
    t2a = (double **) psib[procid];
    if ((gp[procid].neighbors[UP] == -1) && (gp[procid].neighbors[LEFT] == -1)) {
@@ -306,34 +333,46 @@ eof(double) +
    if ((gp[procid].neighbors[DOWN] == -1) && (gp[procid].neighbors[RIGHT] == -1)) {
      t2a[im-1][jm-1]=1.0;
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[UP] == -1) {
      t1a = (double *) t2a[0];
      for(j=firstcol;j<=lastcol;j++) {
        t1a[j] = 1.0;
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[DOWN] == -1) {
      t1a = (double *) t2a[im-1];
      for(j=firstcol;j<=lastcol;j++) {
        t1a[j] = 1.0;
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[LEFT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2a[j][0] = 1.0;
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[RIGHT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2a[j][jm-1] = 1.0;
      }
    }
+   zsim_stamp();
+
    for(i=firstrow;i<=lastrow;i++) {
      t1a = (double *) t2a[i];
      for(iindex=firstcol;iindex<=lastcol;iindex++) {
        t1a[iindex] = 0.0;
      }
    }
+   zsim_stamp();
+
 
 /* wait until all processes have completed the above initialization  */
 #if defined(MULTIPLE_BARRIERS)
@@ -364,6 +403,7 @@ eof(double) +
    if (gp[procid].neighbors[RIGHT] == -1) {
      jend = jm-1;
    }
+   zsim_stamp();
 
    t2a = (double **) rhs_multi[procid][numlev-1];
    t2b = (double **) psib[procid];
@@ -374,6 +414,8 @@ eof(double) +
        t1a[j] = t1b[j] * ressqr;
      }
    }
+   zsim_stamp();
+
    t2a = (double **) q_multi[procid][numlev-1];
    if (gp[procid].neighbors[UP] == -1) {
      t1a = (double *) t2a[0];
@@ -382,6 +424,8 @@ eof(double) +
        t1a[j] = t1b[j];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[DOWN] == -1) {
      t1a = (double *) t2a[im-1];
      t1b = (double *) t2b[im-1];
@@ -389,16 +433,22 @@ eof(double) +
        t1a[j] = t1b[j];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[LEFT] == -1) {
      for(i=istart;i<=iend;i++) {
        t2a[i][0] = t2b[i][0];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[RIGHT] == -1) {
      for(i=istart;i<=iend;i++) {
        t2a[i][jm-1] = t2b[i][jm-1];
      }
    }
+   zsim_stamp();
+
 #if defined(MULTIPLE_BARRIERS)
    BARRIER(bars->sl_psini,nprocs)
 #else
@@ -413,6 +463,8 @@ eof(double) +
        t1a[i] = t1b[i];
      }
    }
+   zsim_stamp();
+
    j = gp[procid].neighbors[DOWN];
    if (j != -1) {
      t1a = (double *) t2a[im-1];
@@ -421,6 +473,8 @@ eof(double) +
        t1a[i] = t1b[i];
      }
    }
+   zsim_stamp();
+
    j = gp[procid].neighbors[LEFT];
    if (j != -1) {
      t2b = (double **) psib[j];
@@ -428,6 +482,8 @@ eof(double) +
        t2a[i][0] = t2b[i][jm-2];
      }
    }
+   zsim_stamp();
+
    j = gp[procid].neighbors[RIGHT];
    if (j != -1) {
      t2b = (double **) psib[j];
@@ -435,6 +491,7 @@ eof(double) +
        t2a[i][jm-1] = t2b[i][1];
      }
    }
+   zsim_stamp();
 
    t2a = (double **) q_multi[procid][numlev-1];
    t2b = (double **) psib[procid];
@@ -449,6 +506,7 @@ eof(double) +
                    ressqr*t1b[j]);
      }
    }
+   zsim_stamp();
 
    multig(procid);
 
@@ -459,6 +517,8 @@ eof(double) +
        t1b[j] = t1a[j];
      }
    }
+   zsim_stamp();
+
 #if defined(MULTIPLE_BARRIERS)
    BARRIER(bars->sl_prini,nprocs)
 #else
@@ -481,34 +541,45 @@ eof(double) +
    if ((gp[procid].neighbors[DOWN] == -1) && (gp[procid].neighbors[RIGHT] == -1)) {
      psibipriv=psibipriv+0.25*(t2a[im-1][jm-1]);
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[UP] == -1) {
      t1a = (double *) t2a[0];
      for(j=firstcol;j<=lastcol;j++) {
        psibipriv = psibipriv + 0.5*t1a[j];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[DOWN] == -1) {
      t1a = (double *) t2a[im-1];
      for(j=firstcol;j<=lastcol;j++) {
        psibipriv = psibipriv + 0.5*t1a[j];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[LEFT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        psibipriv = psibipriv + 0.5*t2a[j][0];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[RIGHT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        psibipriv = psibipriv + 0.5*t2a[j][jm-1];
      }
    }
+   zsim_stamp();
+
    for(i=firstrow;i<=lastrow;i++) {
      t1a = (double *) t2a[i];
      for(iindex=firstcol;iindex<=lastcol;iindex++) {
        psibipriv = psibipriv + t1a[iindex];
      }
    }
+   zsim_stamp();
 
 /* update the shared variable psibi by summing all the psibiprivs
    of the individual processes into it.  note that this combined
@@ -568,6 +639,8 @@ eof(double) +
        }
      }
    }
+   zsim_stamp();
+
 
 /* initialize psi matrices the same way  */
 
@@ -614,6 +687,8 @@ eof(double) +
        }
      }
    }
+   zsim_stamp();
+
 
 /* compute input curl of wind stress */
 
@@ -636,6 +711,8 @@ eof(double) +
      sintemp = sin(sintemp);
      t2a[im-1][jm-1] = factor*sintemp;
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[UP] == -1) {
      t1a = (double *) t2a[0];
      for(j=firstcol;j<=lastcol;j++) {
@@ -645,6 +722,8 @@ eof(double) +
        t1a[j] = curlt;
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[DOWN] == -1) {
      t1a = (double *) t2a[im-1];
      for(j=firstcol;j<=lastcol;j++) {
@@ -654,11 +733,15 @@ eof(double) +
        t1a[j] = curlt;
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[LEFT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2a[j][0] = 0.0;
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[RIGHT] == -1) {
      sintemp = pi*((double) jm-1+j_off)*res/ysca1;
      sintemp = sin(sintemp);
@@ -667,6 +750,8 @@ eof(double) +
        t2a[j][jm-1] = curlt;
      }
    }
+   zsim_stamp();
+
    for(i=firstrow;i<=lastrow;i++) {
      t1a = (double *) t2a[i];
      for(iindex=firstcol;iindex<=lastcol;iindex++) {
@@ -676,6 +761,8 @@ eof(double) +
        t1a[iindex] = curlt;
      }
    }
+   zsim_stamp();
+
 #if defined(MULTIPLE_BARRIERS)
    BARRIER(bars->sl_onetime,nprocs)
 #else
@@ -685,7 +772,7 @@ eof(double) +
 /***************************************************************
  one-time stuff over at this point
  ***************************************************************/
-   zsim_roi_begin();
+   //zsim_roi_begin();
    zsim_stamp();
   // zsim_PIM_function_begin();
    while (!endflag) {

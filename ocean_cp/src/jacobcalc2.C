@@ -27,6 +27,7 @@ EXTERN_ENV
 void jacobcalc2(double ****x, double ****y, double ****z, long psiindex, long pid, long firstrow, long lastrow, long firstcol, long lastcol)
 {
 
+	zsim_stamp();
 
    double f1;
    double f2;
@@ -69,6 +70,9 @@ void jacobcalc2(double ****x, double ****y, double ****z, long psiindex, long pi
      t2a[im-1][jm-1]=0.0;
    }
 
+   zsim_stamp();
+
+
    t2a = x[pid][psiindex];
    jj = gp[pid].neighbors[UPLEFT];
    if (jj != -1) {
@@ -87,6 +91,8 @@ void jacobcalc2(double ****x, double ****y, double ****z, long psiindex, long pi
      t2a[im-1][jm-1]=x[jj][psiindex][1][1];
    }
 
+   zsim_stamp();
+
    t2a = y[pid][psiindex];
    jj = gp[pid].neighbors[UPLEFT];
    if (jj != -1) {
@@ -104,6 +110,8 @@ void jacobcalc2(double ****x, double ****y, double ****z, long psiindex, long pi
    if (jj != -1) {
      t2a[im-1][jm-1]=y[jj][psiindex][1][1];
    }
+
+   zsim_stamp();
 
    t2a = x[pid][psiindex];
    if (gp[pid].neighbors[UP] == -1) {
@@ -164,6 +172,8 @@ void jacobcalc2(double ****x, double ****y, double ****z, long psiindex, long pi
      }
    }
 
+   zsim_stamp();
+
    t2a = y[pid][psiindex];
    if (gp[pid].neighbors[UP] == -1) {
      jj = gp[pid].neighbors[LEFT];
@@ -223,6 +233,8 @@ void jacobcalc2(double ****x, double ****y, double ****z, long psiindex, long pi
      }
    }
 
+   zsim_stamp();
+
    t2a = y[pid][psiindex];
    j = gp[pid].neighbors[UP];
    if (j != -1) {
@@ -255,6 +267,9 @@ void jacobcalc2(double ****x, double ****y, double ****z, long psiindex, long pi
      }
    }
 
+   zsim_stamp();
+
+
    t2a = x[pid][psiindex];
    j = gp[pid].neighbors[UP];
    if (j != -1) {
@@ -286,6 +301,9 @@ void jacobcalc2(double ****x, double ****y, double ****z, long psiindex, long pi
        t2a[i][jm-1] = t2b[i][1];
      }
    }
+
+   zsim_stamp();
+
 
    t2a = x[pid][psiindex];
    t2b = y[pid][psiindex];
@@ -329,6 +347,9 @@ void jacobcalc2(double ****x, double ****y, double ****z, long psiindex, long pi
      }
    }
 
+   zsim_stamp();
+
+
    if (gp[pid].neighbors[UP] == -1) {
      t1c = (double *) t2c[0];
      for (j=firstcol;j<=lastcol;j++) {
@@ -351,6 +372,8 @@ void jacobcalc2(double ****x, double ****y, double ****z, long psiindex, long pi
        t2c[j][jm-1] = 0.0;
      }
    }
+
+   zsim_stamp();
 
 
 }

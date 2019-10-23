@@ -28,6 +28,8 @@ void jacobcalc(double ***x, double ***y, double ***z, long pid, long firstrow, l
 {
 
 zsim_PIM_function_begin();
+zsim_stamp();
+
    double f1;
    double f2;
    double f3;
@@ -69,6 +71,8 @@ zsim_PIM_function_begin();
      t2a[im-1][jm-1]=0.0;
    }
 
+   zsim_stamp();
+
    t2a = (double **) x[pid];
    jj = gp[pid].neighbors[UPLEFT];
    if (jj != -1) {
@@ -87,6 +91,8 @@ zsim_PIM_function_begin();
      t2a[im-1][jm-1]=x[jj][1][1];
    }
 
+   zsim_stamp();
+
    t2a = (double **) y[pid];
    jj = gp[pid].neighbors[UPLEFT];
    if (jj != -1) {
@@ -104,6 +110,8 @@ zsim_PIM_function_begin();
    if (jj != -1) {
      t2a[im-1][jm-1]=y[jj][1][1];
    }
+
+   zsim_stamp();
 
    t2a = (double **) x[pid];
    if (gp[pid].neighbors[UP] == -1) {
@@ -164,6 +172,8 @@ zsim_PIM_function_begin();
      }
    }
 
+   zsim_stamp();
+
    t2a = (double **) y[pid];
    if (gp[pid].neighbors[UP] == -1) {
      jj = gp[pid].neighbors[LEFT];
@@ -223,6 +233,8 @@ zsim_PIM_function_begin();
      }
    }
 
+   zsim_stamp();
+
    j = gp[pid].neighbors[UP];
    if (j != -1) {
      t1a = (double *) t2a[0];
@@ -253,6 +265,8 @@ zsim_PIM_function_begin();
        t2a[i][jm-1] = t2b[i][1];
      }
    }
+
+   zsim_stamp();
 
    t2a = (double **) x[pid];
    j = gp[pid].neighbors[UP];
@@ -285,6 +299,9 @@ zsim_PIM_function_begin();
        t2a[i][jm-1] = t2b[i][1];
      }
    }
+
+   zsim_stamp();
+
 
    t2a = (double **) x[pid];
    t2b = (double **) y[pid];
@@ -327,6 +344,9 @@ zsim_PIM_function_begin();
      }
    }
 
+   zsim_stamp();
+
+
    if (gp[pid].neighbors[UP] == -1) {
      t1c = (double *) t2c[0];
      for (j=firstcol;j<=lastcol;j++) {
@@ -349,6 +369,8 @@ zsim_PIM_function_begin();
        t2c[j][jm-1] = 0.0;
      }
    }
+
+   zsim_stamp();
 
 zsim_PIM_function_end();
 }

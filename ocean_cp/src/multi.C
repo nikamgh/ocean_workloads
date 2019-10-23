@@ -71,7 +71,10 @@ zsim_PIM_function_begin();
 #else
      BARRIER(bars->barrier,nprocs)
 #endif
+	   zsim_stamp();
      copy_black(k,my_num);
+     zsim_stamp();
+
      
      zsim_stamp();
      relax(k,&red_local_err,RED_ITER,my_num);
@@ -82,7 +85,10 @@ zsim_PIM_function_begin();
 #else
      BARRIER(bars->barrier,nprocs)
 #endif
+	   zsim_stamp();
      copy_red(k,my_num);
+     zsim_stamp();
+
 
      zsim_stamp();
      relax(k,&black_local_err,BLACK_ITER,my_num);
@@ -135,9 +141,10 @@ zsim_PIM_function_begin();
          if ((k != 0) && (g_error/errp >= 0.6) &&
 	     (k > minlevel)) {
 /* if need to go to coarser grid                                   */
-
+        	 zsim_stamp();
            copy_borders(k,my_num);
            copy_rhs_borders(k,my_num);
+           zsim_stamp();
 
 /* This bar is needed because the routine rescal uses the neighbor's
    border points to compute s4.  We must ensure that the neighbor's
@@ -150,12 +157,18 @@ zsim_PIM_function_begin();
 	   BARRIER(bars->barrier,nprocs)
 #endif
 
+	   	   zsim_stamp();
            rescal(k,my_num);
+           zsim_stamp();
+
 
 /* transfer residual to rhs of coarser grid                        */
            lev_tol[k-1] = 0.3 * g_error;
            k = k-1;
+           zsim_stamp();
            putz(k,my_num);
+           zsim_stamp();
+
 /* make initial guess on coarser grid zero                         */
            g_error = 1.0e30;
          }
@@ -168,9 +181,13 @@ zsim_PIM_function_begin();
        } else {
 /* else go to next finest grid                                     */
 
+    	 zsim_stamp();
          copy_borders(k,my_num);
+         zsim_stamp();
 
          intadd(k,my_num);
+         zsim_stamp();
+
 /* changes the grid values at the finer level.  rhs at finer level */
 /* remains what it already is                                      */
          k++;

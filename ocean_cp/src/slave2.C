@@ -31,6 +31,7 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
 {
 
 //zsim_PIM_function_begin();
+	zsim_stamp();
    long i;
    long j;
    long iindex;
@@ -96,34 +97,45 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
    if ((gp[procid].neighbors[DOWN] == -1) && (gp[procid].neighbors[RIGHT] == -1)) {
      t2a[im-1][jm-1]=0.0;
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[UP] == -1) {
      t1a = (double *) t2a[0];
      for(j=firstcol;j<=lastcol;j++) {
        t1a[j] = 0.0;
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[DOWN] == -1) {
      t1a = (double *) t2a[im-1];
      for(j=firstcol;j<=lastcol;j++) {
        t1a[j] = 0.0;
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[LEFT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2a[j][0] = 0.0;
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[RIGHT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2a[j][jm-1] = 0.0;
      }
    }
+   zsim_stamp();
+
    for(i=firstrow;i<=lastrow;i++) {
      t1a = (double *) t2a[i];
      for(iindex=firstcol;iindex<=lastcol;iindex++) {
        t1a[iindex] = 0.0;
      }
    }
+   zsim_stamp();
 
    t2a = (double **) gb[procid];
    if ((gp[procid].neighbors[UP] == -1) && (gp[procid].neighbors[LEFT] == -1)) {
@@ -138,34 +150,46 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
    if ((gp[procid].neighbors[DOWN] == -1) && (gp[procid].neighbors[RIGHT] == -1)) {
      t2a[im-1][jm-1]=0.0;
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[UP] == -1) {
      t1a = (double *) t2a[0];
      for(j=firstcol;j<=lastcol;j++) {
        t1a[j] = 0.0;
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[DOWN] == -1) {
      t1a = (double *) t2a[im-1];
      for(j=firstcol;j<=lastcol;j++) {
        t1a[j] = 0.0;
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[LEFT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2a[j][0] = 0.0;
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[RIGHT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2a[j][jm-1] = 0.0;
      }
    }
+   zsim_stamp();
+
    for(i=firstrow;i<=lastrow;i++) {
      t1a = (double *) t2a[i];
      for(iindex=firstcol;iindex<=lastcol;iindex++) {
        t1a[iindex] = 0.0;
      }
    }
+   zsim_stamp();
+
 
 /* put the laplacian of psi{1,3} in work1{1,2}
    note that psi(i,j,2) represents the psi3 array in
@@ -188,6 +212,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
      laplacalc(procid,psi,work1,psiindex,
 	       firstrow,lastrow,firstcol,lastcol);
    }
+   zsim_stamp();
+
 
 /* set values of work2 array to psi1 - psi3   */
 
@@ -207,6 +233,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
      t2a[im-1][jm-1] = t2b[im-1][jm-1] -
 				 t2c[im-1][jm-1];
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[UP] == -1) {
      t1a = (double *) t2a[0];
      t1b = (double *) t2b[0];
@@ -215,6 +243,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        t1a[j] = t1b[j]-t1c[j];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[DOWN] == -1) {
      t1a = (double *) t2a[im-1];
      t1b = (double *) t2b[im-1];
@@ -223,16 +253,22 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        t1a[j] = t1b[j]-t1c[j];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[LEFT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2a[j][0] = t2b[j][0]-t2c[j][0];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[RIGHT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2a[j][jm-1] = t2b[j][jm-1]-t2c[j][jm-1];
      }
    }
+   zsim_stamp();
+
    for(i=firstrow;i<=lastrow;i++) {
      t1a = (double *) t2a[i];
      t1b = (double *) t2b[i];
@@ -241,6 +277,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
          t1a[iindex] = t1b[iindex] - t1c[iindex];
      }
    }
+   zsim_stamp();
+
 
 /* set values of work3 array to h3/h * psi1 + h1/h * psi3  */
 
@@ -262,28 +300,38 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
      t2a[im-1][jm-1] = hh3*t2a[im-1][jm-1] +
 				 hh1*t2c[im-1][jm-1];
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[UP] == -1) {
      for(j=firstcol;j<=lastcol;j++) {
        t2a[0][j] = hh3*t2a[0][j]+hh1*t2c[0][j];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[DOWN] == -1) {
      for(j=firstcol;j<=lastcol;j++) {
        t2a[im-1][j] = hh3*t2a[im-1][j] +
 				hh1*t2c[im-1][j];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[LEFT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2a[j][0] = hh3*t2a[j][0]+hh1*t2c[j][0];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[RIGHT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2a[j][jm-1] = hh3*t2a[j][jm-1] +
 				hh1*t2c[j][jm-1];
      }
    }
+   zsim_stamp();
+
    for(i=firstrow;i<=lastrow;i++) {
      t1a = (double *) t2a[i];
      t1c = (double *) t2c[i];
@@ -291,6 +339,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
         t1a[iindex] = hh3*t1a[iindex] + hh1*t1c[iindex];
      }
    }
+   zsim_stamp();
+
 
 /* set values of temparray{1,3} to psim{1,3}  */
 
@@ -338,6 +388,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        }
      }
    }
+   zsim_stamp();
+
 #if defined(MULTIPLE_BARRIERS)
    BARRIER(bars->sl_phase_1,nprocs)
 #else
@@ -397,6 +449,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
      }
    }
 
+   zsim_stamp();
+
 /* put the laplacian of the psim array
    into the work7 array; first part of a three-laplacian
    calculation to compute the friction terms  */
@@ -418,6 +472,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
      laplacalc(procid,psim,work7,psiindex,
 	       firstrow,lastrow,firstcol,lastcol);
    }
+   zsim_stamp();
+
 
 /* to the values of the work1{1,2} arrays obtained from the
    laplacians of psi{1,2} in the previous phase, add to the
@@ -465,6 +521,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        }
      }
    }
+   zsim_stamp();
+
 #if defined(MULTIPLE_BARRIERS)
    BARRIER(bars->sl_phase_2,nprocs)
 #else
@@ -485,6 +543,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
      jacobcalc2(work1,temparray,work5,psiindex,procid,firstrow,lastrow,
 	       firstcol,lastcol);
    }
+   zsim_stamp();
+
 
 /* set values of psim{1,3} to temparray{1,3}  */
 
@@ -535,6 +595,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        }
      }
    }
+   zsim_stamp();
+
 
 /* put the laplacian of the work7{1,2} arrays in the work4{1,2}
    arrays; second step in the three-laplacian friction calculation  */
@@ -543,6 +605,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
      laplacalc(procid,work7,work4,psiindex,
 	       firstrow,lastrow,firstcol,lastcol);
    }
+   zsim_stamp();
+
 #if defined(MULTIPLE_BARRIERS)
    BARRIER(bars->sl_phase_3,nprocs)
 #else
@@ -564,10 +628,14 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
 /* put the laplacian of the work4{1,2} arrays in the work7{1,2}
    arrays; third step in the three-laplacian friction calculation  */
 
+   zsim_stamp();
+
    for(psiindex=0;psiindex<=1;psiindex++) {
      laplacalc(procid,work4,work7,psiindex,
 	       firstrow,lastrow,firstcol,lastcol);
    }
+   zsim_stamp();
+
 #if defined(MULTIPLE_BARRIERS)
    BARRIER(bars->sl_phase_4,nprocs)
 #else
@@ -611,6 +679,9 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
 	   hh3*t2d[im-1][0] + hinv*t2h[im-1][0] +
 	   lf*hh1*t2e[im-1][0] + lf*hh3*t2f[im-1][0];
    }
+
+   zsim_stamp();
+
    if ((gp[procid].neighbors[UP] == -1) && (gp[procid].neighbors[RIGHT] == -1)) {
      t2a[0][jm-1] = t2c[0][jm-1]-t2d[0][jm-1]+
 	   eig2*t2g[0][jm-1]+h1inv*t2h[0][jm-1] +
@@ -619,6 +690,7 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
 	   hh3*t2d[0][jm-1]+hinv*t2h[0][jm-1] +
 	   lf*hh1*t2e[0][jm-1]+lf*hh3*t2f[0][jm-1];
    }
+
    if ((gp[procid].neighbors[DOWN] == -1) && (gp[procid].neighbors[RIGHT] == -1)) {
      t2a[im-1][jm-1] = t2c[im-1][jm-1] -
 	   t2d[im-1][jm-1]+eig2*t2g[im-1][jm-1] +
@@ -629,6 +701,9 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
 	   lf*hh1*t2e[im-1][jm-1] +
 	   lf*hh3*t2f[im-1][jm-1];
    }
+
+   zsim_stamp();
+
    if (gp[procid].neighbors[UP] == -1) {
      t1a = (double *) t2a[0];
      t1b = (double *) t2b[0];
@@ -647,6 +722,9 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
 	   lf*hh1*t1e[j]+lf*hh3*t1f[j];
      }
    }
+
+   zsim_stamp();
+
    if (gp[procid].neighbors[DOWN] == -1) {
      t1a = (double *) t2a[im-1];
      t1b = (double *) t2b[im-1];
@@ -666,6 +744,9 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
 	   lf*hh1*t1e[j]+lf*hh3*t1f[j];
      }
    }
+
+   zsim_stamp();
+
    if (gp[procid].neighbors[LEFT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2a[j][0] = t2c[j][0]-t2d[j][0] +
@@ -676,6 +757,9 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
 	   lf*hh1*t2e[j][0]+lf*hh3*t2f[j][0];
      }
    }
+
+   zsim_stamp();
+
    if (gp[procid].neighbors[RIGHT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2a[j][jm-1] = t2c[j][jm-1] -
@@ -687,6 +771,9 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
 	   lf*hh1*t2e[j][jm-1]+lf*hh3*t2f[j][jm-1];
      }
    }
+
+   zsim_stamp();
+
 
    for(i=firstrow;i<=lastrow;i++) {
      t1a = (double *) t2a[i];
@@ -708,6 +795,9 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
 	   lf*hh3*t1f[iindex];
      }
    }
+
+   zsim_stamp();
+
 #if defined(MULTIPLE_BARRIERS)
    BARRIER(bars->sl_phase_5,nprocs)
 #else
@@ -742,6 +832,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
    if (gp[procid].neighbors[RIGHT] == -1) {
      jend = jm-1;
    }
+   zsim_stamp();
+
    t2a = (double **) rhs_multi[procid][numlev-1];
    t2b = (double **) ga[procid];
    t2c = (double **) oldga[procid];
@@ -753,6 +845,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        t1a[j] = t1b[j] * ressqr;
      }
    }
+   zsim_stamp();
+
 
    if (gp[procid].neighbors[UP] == -1) {
      t1d = (double *) t2d[0];
@@ -761,6 +855,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        t1d[j] = t1b[j];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[DOWN] == -1) {
      t1d = (double *) t2d[im-1];
      t1b = (double *) t2b[im-1];
@@ -768,16 +864,21 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        t1d[j] = t1b[j];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[LEFT] == -1) {
      for(i=istart;i<=iend;i++) {
        t2d[i][0] = t2b[i][0];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[RIGHT] == -1) {
      for(i=istart;i<=iend;i++) {
        t2d[i][jm-1] = t2b[i][jm-1];
      }
    }
+   zsim_stamp();
 
    fac = 1.0 / (4.0 - ressqr*eig2);
    for(i=ist;i<=ien;i++) {
@@ -787,6 +888,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        t1d[j] = t1c[j];
      }
    }
+   zsim_stamp();
+
 
    if ((procid == MASTER) || (do_stats)) {
      CLOCK(multi_start);
@@ -817,6 +920,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        t1c[j] = t1d[j];
      }
    }
+   zsim_stamp();
+
 #if defined(MULTIPLE_BARRIERS)
    BARRIER(bars->sl_phase_6,nprocs)
 #else
@@ -847,34 +952,45 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
    if ((gp[procid].neighbors[DOWN] == -1) && (gp[procid].neighbors[RIGHT] == -1)) {
      psiaipriv=psiaipriv+0.25*(t2a[im-1][jm-1]);
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[UP] == -1) {
      t1a = (double *) t2a[0];
      for(j=firstcol;j<=lastcol;j++) {
        psiaipriv = psiaipriv + 0.5*t1a[j];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[DOWN] == -1) {
      t1a = (double *) t2a[im-1];
      for(j=firstcol;j<=lastcol;j++) {
        psiaipriv = psiaipriv + 0.5*t1a[j];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[LEFT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        psiaipriv = psiaipriv + 0.5*t2a[j][0];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[RIGHT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        psiaipriv = psiaipriv + 0.5*t2a[j][jm-1];
      }
    }
+   zsim_stamp();
+
    for(i=firstrow;i<=lastrow;i++) {
      t1a = (double *) t2a[i];
      for(iindex=firstcol;iindex<=lastcol;iindex++) {
        psiaipriv = psiaipriv + t1a[iindex];
      }
    }
+   zsim_stamp();
 
 /* after computing its private sum, every process adds that to the
    shared running sum psiai  */
@@ -913,6 +1029,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
      t2a[im-1][jm-1] = t2a[im-1][jm-1] +
 			      f4*t2b[im-1][jm-1];
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[UP] == -1) {
      t1a = (double *) t2a[0];
      t1b = (double *) t2b[0];
@@ -920,6 +1038,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        t1a[j] = t1a[j]+f4*t1b[j];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[DOWN] == -1) {
      t1a = (double *) t2a[im-1];
      t1b = (double *) t2b[im-1];
@@ -927,16 +1047,22 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        t1a[j] = t1a[j]+f4*t1b[j];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[LEFT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2a[j][0] = t2a[j][0]+f4*t2b[j][0];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[RIGHT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2a[j][jm-1] = t2a[j][jm-1]+f4*t2b[j][jm-1];
      }
    }
+   zsim_stamp();
+
    for(i=firstrow;i<=lastrow;i++) {
      t1a = (double *) t2a[i];
      t1b = (double *) t2b[i];
@@ -944,6 +1070,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        t1a[iindex] = t1a[iindex]+f4*t1b[iindex];
      }
    }
+   zsim_stamp();
+
 
    t2a = (double **) rhs_multi[procid][numlev-1];
    t2b = (double **) gb[procid];
@@ -956,6 +1084,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        t1a[j] = t1b[j] * ressqr;
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[UP] == -1) {
      t1d = (double *) t2d[0];
      t1b = (double *) t2b[0];
@@ -963,6 +1093,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        t1d[j] = t1b[j];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[DOWN] == -1) {
      t1d = (double *) t2d[im-1];
      t1b = (double *) t2b[im-1];
@@ -970,6 +1102,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        t1d[j] = t1b[j];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[LEFT] == -1) {
      for(i=istart;i<=iend;i++) {
        t2d[i][0] = t2b[i][0];
@@ -980,6 +1114,7 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        t2d[i][jm-1] = t2b[i][jm-1];
      }
    }
+   zsim_stamp();
 
    fac = 1.0 / (4.0 - ressqr*eig2);
    for(i=ist;i<=ien;i++) {
@@ -989,6 +1124,7 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        t1d[j] = t1c[j];
      }
    }
+   zsim_stamp();
 
    if ((procid == MASTER) || (do_stats)) {
      CLOCK(multi_start);
@@ -1010,6 +1146,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        t1c[j] = t1d[j];
      }
    }
+   zsim_stamp();
+
 #if defined(MULTIPLE_BARRIERS)
    BARRIER(bars->sl_phase_8,nprocs)
 #else
@@ -1043,6 +1181,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
      t2c[im-1][0] = t2b[im-1][0]-hh1*t2a[im-1][0];
      t2d[im-1][0] = t2b[im-1][0]+hh3*t2a[im-1][0];
    }
+   zsim_stamp();
+
    if ((gp[procid].neighbors[UP] == -1) && (gp[procid].neighbors[RIGHT] == -1)) {
      t2c[0][jm-1] = t2b[0][jm-1]-hh1*t2a[0][jm-1];
      t2d[0][jm-1] = t2b[0][jm-1]+hh3*t2a[0][jm-1];
@@ -1053,6 +1193,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
      t2d[im-1][jm-1] = t2b[im-1][jm-1] +
 				 hh3*t2a[im-1][jm-1];
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[UP] == -1) {
      t1a = (double *) t2a[0];
      t1b = (double *) t2b[0];
@@ -1063,6 +1205,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        t1c[j] = t1b[j]-hh1*t1a[j];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[DOWN] == -1) {
      t1a = (double *) t2a[im-1];
      t1b = (double *) t2b[im-1];
@@ -1073,18 +1217,24 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        t1c[j] = t1b[j]-hh1*t1a[j];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[LEFT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2d[j][0] = t2b[j][0]+hh3*t2a[j][0];
        t2c[j][0] = t2b[j][0]-hh1*t2a[j][0];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[RIGHT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2d[j][jm-1] = t2b[j][jm-1]+hh3*t2a[j][jm-1];
        t2c[j][jm-1] = t2b[j][jm-1]-hh1*t2a[j][jm-1];
      }
    }
+   zsim_stamp();
+
 
    for(i=firstrow;i<=lastrow;i++) {
      t1a = (double *) t2a[i];
@@ -1096,6 +1246,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        t1c[iindex] = t1b[iindex] - hh1*t1a[iindex];
      }
    }
+   zsim_stamp();
+
 #if defined(MULTIPLE_BARRIERS)
    BARRIER(bars->sl_phase_9,nprocs)
 #else
@@ -1130,6 +1282,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
      t2a[im-1][jm-1] = t2a[im-1][jm-1] +
 				  timst*t2b[im-1][jm-1];
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[UP] == -1) {
      t1a = (double *) t2a[0];
      t1b = (double *) t2b[0];
@@ -1137,6 +1291,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        t1a[j] = t1a[j] + timst*t1b[j];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[DOWN] == -1) {
      t1a = (double *) t2a[im-1];
      t1b = (double *) t2b[im-1];
@@ -1144,17 +1300,23 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        t1a[j] = t1a[j] + timst*t1b[j];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[LEFT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2a[j][0] = t2a[j][0] + timst*t2b[j][0];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[RIGHT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2a[j][jm-1] = t2a[j][jm-1] +
 				 timst*t2b[j][jm-1];
      }
    }
+   zsim_stamp();
+
    for(i=firstrow;i<=lastrow;i++) {
      t1a = (double *) t2a[i];
      t1b = (double *) t2b[i];
@@ -1162,6 +1324,7 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
          t1a[iindex] = t1a[iindex] + timst*t1b[iindex];
      }
    }
+   zsim_stamp();
 
    t2a = (double **) psi[procid][1];
    t2b = (double **) work2[procid];
@@ -1180,6 +1343,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
      t2a[im-1][jm-1] = t2a[im-1][jm-1] +
 				  timst*t2b[im-1][jm-1];
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[UP] == -1) {
      t1a = (double *) t2a[0];
      t1b = (double *) t2b[0];
@@ -1187,6 +1352,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        t1a[j] = t1a[j] + timst*t1b[j];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[DOWN] == -1) {
      t1a = (double *) t2a[im-1];
      t1b = (double *) t2b[im-1];
@@ -1194,17 +1361,23 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
        t1a[j] = t1a[j] + timst*t1b[j];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[LEFT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2a[j][0] = t2a[j][0] + timst*t2b[j][0];
      }
    }
+   zsim_stamp();
+
    if (gp[procid].neighbors[RIGHT] == -1) {
      for(j=firstrow;j<=lastrow;j++) {
        t2a[j][jm-1] = t2a[j][jm-1] +
 				 timst*t2b[j][jm-1];
      }
    }
+
+   zsim_stamp();
 
    for(i=firstrow;i<=lastrow;i++) {
      t1a = (double *) t2a[i];
@@ -1213,6 +1386,8 @@ void slave2(long procid, long firstrow, long lastrow, long numrows, long firstco
          t1a[iindex] = t1a[iindex] + timst*t1b[iindex];
      }
    }
+   zsim_stamp();
+
 
 #if defined(MULTIPLE_BARRIERS)
    BARRIER(bars->sl_phase_10,nprocs)
